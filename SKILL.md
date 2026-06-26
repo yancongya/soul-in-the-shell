@@ -183,7 +183,44 @@ soul.toneByScene → shell.components 各状态的色彩和动效
 - ❌ 反面示例（不要这样写）
 - ✅ 正面示例（这样写）
 
-场景至少覆盖：成功、错误、空状态、确认、引导、按钮
+场景至少覆盖：成功、错误、空状态、确认、引导、按钮、tab、toast、dialog
+
+**Tab 语言风格规范：**
+- 昵称式：体重秤、口粮钱、小日记
+- 避免过长：「体重记录数据」→「体重秤」
+- 避免技术术语：「Weight Data」→「Weight」
+- 保持一致：统一用词，不要混用
+
+**Toast 语言风格规范：**
+- 极简反馈：已保存、已删除、搞定了
+- 避免冗余：「保存成功」→「已保存」
+- 温和错误：「稍后再试试」
+- 情感适度：不要过度兴奋或冷淡
+
+**Dialog 语言风格规范：**
+- 简洁确认：「删除这个？」
+- 温和提示：「删除后就找不回来了」
+- 避免恐吓：不要用「不可恢复」等强烈措辞
+
+**Placeholder 语言风格规范：**
+- 移除"请"字：「请选择日期」→「选择日期」
+- 简洁直接：「请输入名称」→「输入名称」
+- 避免命令式：直接用动词开头
+
+**空状态语言风格规范：**
+- 鼓励引导：「暂无数据」→「还没有记录，开始记录第一个瞬间吧」
+- 温暖亲切：「暂无宠物」→「还没有宠物」
+- 避免冷冰冰：「暂无」→「还没有」
+
+**错误语言风格规范：**
+- 温和安抚：「操作失败」→「遇到了一点小问题」
+- 避免恐吓：「网络错误」→「网络好像不太稳定」
+- 先共情再解决：「保存失败」→「保存遇到一点小问题」
+
+**标题语言风格规范：**
+- 简洁可爱：「照片相册」→「相册」
+- 移除冗余：「提醒事项」→「提醒」
+- 有温度：「宠物成长记录与智能分析平台」→「记录宠物成长，感受生命温度」
 
 #### 4. 反模式（antiPatterns）
 
@@ -260,7 +297,100 @@ Agent 产出文案后，可按此机制自检是否符合 soul.json 的风格要
 - **forbid**：禁止的做法
 - **pattern**：常见变体的结构模板
 
-至少覆盖：modal、toast、emptyState、button、tooltip、icon、guide
+至少覆盖：modal、toast、emptyState、button、ghost、tooltip、icon、guide
+
+**Ghost 按钮组件规范：**
+
+```json
+{
+  "ghost": {
+    "style": "轻量透明按钮，悬停时显示边框和背景色",
+    "features": [
+      "尺寸：30x30 或 36x36",
+      "圆角：6px",
+      "边框：1.5px solid var(--color-border)",
+      "背景：transparent → hover: var(--color-primary-bg)",
+      "颜色：var(--color-text-secondary) → hover: var(--color-primary)",
+      "动画：scale(0.95) 点击反馈",
+      "必需：title 属性（tooltip）"
+    ],
+    "forbid": [
+      "主要操作用 ghost",
+      "无 tooltip 的图标按钮",
+      "尺寸不一致",
+      "无点击反馈动画",
+      "边框过粗（>2px）"
+    ],
+    "pattern": {
+      "usage": "次要操作、图标按钮、工具栏",
+      "variants": {
+        "small": "24x24，紧凑空间",
+        "default": "30x30，常规操作",
+        "medium": "36x36，触摸友好"
+      }
+    }
+  }
+}
+```
+
+**Toast 组件规范：**
+
+```json
+{
+  "toast": {
+    "style": "极简反馈弹窗，自动消失",
+    "features": [
+      "位置：居中顶部",
+      "圆角：var(--sketch-radius-sm)",
+      "阴影：var(--sketch-shadow)",
+      "字体：var(--font-handwrite)",
+      "动画：弹性进入 + 渐隐退出",
+      "时长：2-3 秒自动消失"
+    ],
+    "forbid": [
+      "冗余文案：「保存成功」→「已保存」",
+      "过度兴奋或冷淡的语气",
+      "需要手动关闭"
+    ],
+    "pattern": {
+      "types": {
+        "success": "var(--color-success-bg)，✓ 图标",
+        "error": "var(--color-error-bg)，✗ 图标",
+        "warning": "var(--color-warning-bg)，! 图标",
+        "info": "var(--color-primary-bg)，i 图标"
+      }
+    }
+  }
+}
+```
+
+**Dialog 组件规范：**
+
+```json
+{
+  "dialog": {
+    "style": "亲切友好的弹窗，三段式结构",
+    "features": [
+      "圆角：var(--sketch-radius-lg)",
+      "阴影：var(--sketch-shadow-lg)",
+      "遮罩：rgba(0,0,0,0.3)",
+      "动画：弹性缩放进入 scale(0.95) → scale(1)",
+      "关闭：点击遮罩或 X 按钮",
+      "按钮：取消(ghost) + 确认(primary)"
+    ],
+    "forbid": [
+      "恐吓性文案：「此操作不可恢复」",
+      "冷冰冰的标题：「警告」",
+      "无关闭按钮",
+      "遮罩不可点击关闭"
+    ],
+    "pattern": {
+      "structure": "标题 + 内容区域 + 按钮栏",
+      "buttonOrder": "取消(左) + 确认(右)"
+    }
+  }
+}
+```
 
 #### 4. 布局（layout）
 
